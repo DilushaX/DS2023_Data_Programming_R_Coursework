@@ -1,0 +1,97 @@
+```{r}
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+## 1. load dataset
+```{r}
+library(readr)
+
+data <- read_csv("C:/Users/User/Desktop/GitHub/GitHub/DS2023_Data_Programming_R_Coursework/data/clean_data.csv")
+glimpse(data)
+
+```
+
+```{r}
+summary(data)
+```
+```{r}
+table(data$somatic_status)
+prop.table(table(data$somatic_status))
+```
+
+
+
+## 2. Age vs Somatic Status
+```{r}
+ggplot(data, aes(x = somatic_status, y = current_age)) +
+  geom_boxplot(fill = "steelblue") +
+  labs(
+    title = "Age Distribution by Somatic Status",
+    x = "Somatic Status",
+    y = "Age"
+  ) +
+  theme_minimal()
+```
+## 3. Sex vs Somatic Status
+```{r}
+ggplot(data, aes(x = sex, fill = somatic_status)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Somatic Status by Sex",
+    x = "Sex",
+    y = "Proportion"
+  ) +
+  theme_minimal()
+```
+## 4. Stage vs Somatic Status
+```{r}
+ggplot(data, aes(x = stage_highest_recorded, fill = somatic_status)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Somatic Status by Tumor Stage",
+    x = "Tumor Stage",
+    y = "Proportion"
+  ) +
+  theme_minimal()
+```
+## 5. Cancer Type vs Somatic Status
+```{r}
+ggplot(data, aes(x = cancer_type, fill = somatic_status)) +
+  geom_bar(position = "dodge") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    title = "Somatic Status by Cancer Type",
+    x = "Cancer Type",
+    y = "Count"
+  )
+```
+```{r}
+knitr::opts_chunk$set(
+  fig.path = "outputs/",
+  dev = "png",
+  dpi = 300,
+  fig.width = 8,
+  fig.height = 6
+)
+```
+
+## Final Conclusion
+
+This study showed that tumor type and stage are stronger predictors of treatment response than age and gender. While the model achieved reasonable performance, data imbalance and quality issues limited accuracy. Overall, basic clinical features provide useful insight, but additional variables are needed for better prediction.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
