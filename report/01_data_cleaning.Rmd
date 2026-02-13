@@ -17,6 +17,13 @@ data_raw <- read_tsv("~/Downloads/GitHub/DS2023_Data_Programming_R_Coursework/da
 # Inspect structure
 glimpse(data_raw)
 ```
+## Missing values check
+```{r}
+colSums(is.na(data_raw))
+```
+
+
+
 ## 3. Handling Missing Values
 ```{r}
 colnames(data_raw)
@@ -92,46 +99,29 @@ str(data_clean)
 colSums(is.na(data_clean))
 ```
 
+## 9. sv clean data
+
 ```{r}
-getwd()
+exists("data_clean")
 ```
 
 ```{r}
-# Save cleaned dataset
+dir.create("data", showWarnings = FALSE)
+
 write.csv(
   data_clean,
-  file = "data/clean_data.csv",
+  "data/clean_data.csv",
   row.names = FALSE
 )
 ```
 
+```{r}
+file.exists("data/clean_data.csv")
+```
 
+## Data Cleaning – Conclusion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  The dataset contained missing values, inconsistencies, and noisy NLP-derived fields. Through systematic cleaning, filtering, and proper formatting, the data was transformed into a structured and analysis-ready format. This step was essential to ensure accurate modeling and reliable results in later stages of the project.
 
 
 

@@ -434,6 +434,64 @@ glimpse(data_raw)</code></pre>
 ## $ `TMB (nonsynonymous)`                    &lt;dbl&gt; 1.109155, 32.165504, 7.764087…
 ## $ `Tumor Purity`                           &lt;dbl&gt; NA, NA, 40, 30, 30, 25, 50, N…</code></pre>
 </div>
+<div id="missing-values-check" class="section level2">
+<h2>Missing values check</h2>
+<pre class="r"><code>colSums(is.na(data_raw))</code></pre>
+<pre><code>##                               Study ID                             Patient ID 
+##                                      0                                      0 
+##                              Sample ID       Tumor Site: Adrenal Glands (NLP) 
+##                                      0                                      0 
+##                 Tumor Site: Bone (NLP)                            Cancer Type 
+##                                      0                                      0 
+##                   Cancer Type Detailed                         Clinical Group 
+##                                      0                                   4664 
+##                       Clinical Summary            Tumor Site: CNS/Brain (NLP) 
+##                                    488                                      0 
+##                            Current Age                  Diagnosis Description 
+##                                      3                                      0 
+##                              Ethnicity                Fraction Genome Altered 
+##                                      0                                    170 
+##                                    Sex                             Gene Panel 
+##                                      0                                      0 
+##      Gleason Score, 1st Reported (NLP)  Gleason Score, Highest Reported (NLP) 
+##                                  21768                                  21768 
+## Gleason Score Reported on Sample (NLP)                                   HER2 
+##                                  22930                                  19648 
+##       History for Positive PD-L1 (NLP)                                     HR 
+##                                  17989                                  19648 
+##            ICD-O Histology Description            Tumor Site: Intra Abdominal 
+##                                      0                                      0 
+##                Tumor Site: Liver (NLP)                 Tumor Site: Lung (NLP) 
+##                                      0                                      0 
+##           Tumor Site: Lymph Node (NLP)                        Metastatic Site 
+##                                      0                                  16206 
+##                            MSI Comment                              MSI Score 
+##                                   5697                                    553 
+##                               MSI Type                         Mutation Count 
+##                                    554                                   1178 
+##       Number of Tumor Registry Entries                          Oncotree Code 
+##                                      0                                      0 
+##              Overall Survival (Months)                Overall Survival Status 
+##                                      0                                      0 
+##                Tumor Site: Other (NLP)                     Pathological Group 
+##                                      0                                   7273 
+##            Sample PD-L1 Positive (NLP)               Tumor Site: Pleura (NLP) 
+##                                  21514                                      0 
+##                     Primary Tumor Site           Prior Treatment to MSK (NLP) 
+##                                      0                                      0 
+##                                   Race  Tumor Site: Reproductive Organs (NLP) 
+##                                      0                                      0 
+##                           Sample Class          Number of Samples Per Patient 
+##                                      0                                      0 
+##                        Sample coverage                            Sample Type 
+##                                      0                                      0 
+##                  Smoking History (NLP)                         Somatic Status 
+##                                      0                                      0 
+##               Stage (Highest Recorded)                    TMB (nonsynonymous) 
+##                                      0                                      0 
+##                           Tumor Purity 
+##                                    586</code></pre>
+</div>
 <div id="handling-missing-values" class="section level2">
 <h2>3. Handling Missing Values</h2>
 <pre class="r"><code>colnames(data_raw)</code></pre>
@@ -575,6 +633,28 @@ str(data_clean)</code></pre>
 ##                      0                      0                      0 
 ##            cancer_type stage_highest_recorded 
 ##                      0                      0</code></pre>
+</div>
+<div id="sv-clean-data" class="section level2">
+<h2>9. sv clean data</h2>
+<pre class="r"><code>exists(&quot;data_clean&quot;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>dir.create(&quot;data&quot;, showWarnings = FALSE)
+
+write.csv(
+  data_clean,
+  &quot;data/clean_data.csv&quot;,
+  row.names = FALSE
+)</code></pre>
+<pre class="r"><code>file.exists(&quot;data/clean_data.csv&quot;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="data-cleaning-conclusion" class="section level2">
+<h2>Data Cleaning – Conclusion</h2>
+<p>The dataset contained missing values, inconsistencies, and noisy
+NLP-derived fields. Through systematic cleaning, filtering, and proper
+formatting, the data was transformed into a structured and
+analysis-ready format. This step was essential to ensure accurate
+modeling and reliable results in later stages of the project.</p>
 </div>
 
 
