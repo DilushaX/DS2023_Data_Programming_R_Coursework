@@ -1,0 +1,104 @@
+## 1. Load Required Libraries
+```{r}
+library(caret)
+library(dplyr)
+library(pROC)
+
+clean_data <- read.csv("data/clean_data.csv")
+
+data <- clean_data
+```
+## 2. Train/Test Split
+```{r}
+trainIndex <- createDataPartition(data$somatic_status, 
+                                   p = 0.8, 
+                                   list = FALSE)
+
+train_data <- data[trainIndex, ]
+test_data  <- data[-trainIndex, ]
+```
+
+## 3. Train Control
+```{r}
+train_control <- trainControl(
+  method = "cv",
+  number = 5,
+  sampling = "down",        # HANDLE IMBALANCE
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+```
+ 
+```{r}
+colnames(train_data)
+```
+ 
+ 
+## 4. Train Logistic Regression Model
+```{r}
+model <- train(
+  somatic_status ~ current_age + sex + cancer_type + stage_highest_recorded,
+  data = train_data,
+  method = "glm",
+  family = "binomial",
+  metric = "ROC",
+  trControl = train_control
+)
+```
+
+## 5. Predict Probabilities
+```{r}
+probs <- predict(model, test_data, type = "prob")
+```
+
+## 6. Adjust Threshold
+```{r}
+pred_class <- ifelse(probs$Matched > 0.3, 
+                     "Matched", 
+                     "Unmatched")
+
+pred_class <- factor(pred_class, 
+                     levels = c("Matched", "Unmatched"))
+```
+
+## 7. Confusion Matrix
+```{r}
+# Ensure both are factors with same levels
+
+pred_class <- factor(pred_class,
+                     levels = c("Matched", "Unmatched"))
+
+test_data$somatic_status <- factor(test_data$somatic_status,
+                                   levels = c("Matched", "Unmatched"))
+```
+
+```{r}
+conf_matrix <- confusionMatrix(
+  pred_class,
+  test_data$somatic_status,
+  positive = "Matched"
+)
+
+conf_matrix
+```
+
+## 8. ROC Curve & AUC
+```{r}
+roc_obj <- roc(test_data$somatic_status, 
+               probs$Matched)
+
+plot(roc_obj, col = "blue", main = "ROC Curve")
+
+auc(roc_obj)
+```
+
+## Final Conclusion.
+
+  The logistic regression model achieved an overall accuracy of 95.63%. However, this high accuracy is misleading due to the severe class imbalance in the dataset. The model shows high sensitivity (96.26%) for the majority class but extremely poor specificity (2.94%) for the minority class. The balanced accuracy of 49.6% and the negative kappa value indicate that the model does not perform better than random classification when considering class imbalance.
+
+  The ROC curve further suggests limited discrimination ability. These results indicate that basic demographic and clinical characteristics alone are not sufficient to reliably predict primary treatment response. More advanced feature engineering, additional clinical variables, or alternative modeling techniques may be needed to improve predictive performance.
+
+
+
+
+
